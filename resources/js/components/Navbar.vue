@@ -73,9 +73,7 @@
 
 <script>
 export default {
-    mounted() {
-        console.log("Component mouted");
-    }
+    
 };
 </script>
 

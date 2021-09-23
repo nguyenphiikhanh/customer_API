@@ -16,6 +16,7 @@
         <div id="app">
             <navbar></navbar>
             <customers></customers>
+            {{-- <footer-comp></footer-comp> --}}
         </div>
        <script type="text/javascript" src="{{mix('js/app.js')}}"></script>
     </body>
