@@ -68,7 +68,53 @@
                         <p class="card-text">
                             {{ customerShow.city_customer }}
                         </p>
-                        <button class="btn btn-warning">Edit</button>
+                        <b-button
+                            variant="warning"
+                            @click="$bvModal.show('bv-modal-example')"
+                            >Edit</b-button
+                        >
+                        <b-modal id="bv-modal-example" hide-footer @close="$bvModal.hide('bv-modal-example')">
+                            <div class="d-block">
+                                <h3>Edit Info</h3>
+                                <b-form>
+                                    <b-form-group
+                                        id="input-group-1"
+                                        label="Email address:"
+                                        label-for="input-1"
+                                    >
+                                        <b-form-input
+                                            id="input-1"
+                                            type="email"
+                                            placeholder="Enter email"
+                                            required
+                                        ></b-form-input>
+                                    </b-form-group>
+
+                                    <b-form-group
+                                        id="input-group-2"
+                                        label="Your Name:"
+                                        label-for="input-2"
+                                    >
+                                        <b-form-input
+                                            id="input-2"
+                                            placeholder="Enter name"
+                                            required
+                                        ></b-form-input>
+                                    </b-form-group>
+
+
+                                    <div class="row justify-content-center">
+                                        <b-button type="submit" class="mr-1" @click="$bvModal.hide('bv-modal-example')"
+                                        >Close</b-button
+                                    >
+                                    <b-button type="reset" variant="primary"
+                                        >Save</b-button
+                                    >
+                                    </div>
+                                </b-form>
+                            </div>
+                        </b-modal>
+
                         <button
                             @click="deleteCustomer(customerShow.id_customer)"
                             class="btn btn-danger"
@@ -140,7 +186,7 @@ export default {
             }).then(result => {
                 if (result.isConfirmed) {
                     axios
-                        .delete('api/customers/'+id)
+                        .delete("api/customers/" + id)
                         .then(Response => {
                             Swal.fire(
                                 "Deleted!",
