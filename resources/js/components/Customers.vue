@@ -3,7 +3,18 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Test data Customers</div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="card-header col-md-11">
+                                Test data Customers
+                            </div>
+                            <b-button class="col-md-1"
+                                variant="outline-primary"
+                                @click="$bvModal.show('customer-add')"
+                                >&plus;</b-button
+                            >
+                        </div>
+                    </div>
 
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
@@ -63,6 +74,9 @@
                             {{ customerShow.phone_customer }}
                         </p>
                         <p class="card-text">
+                            {{ customerShow.address_customer }}
+                        </p>
+                        <p class="card-text">
                             {{ customerShow.email_customer }}
                         </p>
                         <p class="card-text">
@@ -70,46 +84,74 @@
                         </p>
                         <b-button
                             variant="warning"
-                            @click="$bvModal.show('bv-modal-example')"
                             >Edit</b-button
                         >
-                        <b-modal id="bv-modal-example" hide-footer @close="$bvModal.hide('bv-modal-example')">
+                        <b-modal
+                            id="customer-add"
+                            hide-footer
+                            @close="$bvModal.hide('customer-add')"
+                        >
                             <div class="d-block">
-                                <h3>Edit Info</h3>
-                                <b-form>
-                                    <b-form-group
-                                        id="input-group-1"
-                                        label="Email address:"
-                                        label-for="input-1"
-                                    >
+                                <h3>Add customer</h3>
+                                <b-form @submit.prevent="editCustomer">
+                                    <b-form-group label="Name:">
                                         <b-form-input
-                                            id="input-1"
+                                            type="text"
+                                            v-model="customer.name_customer"
+                                            placeholder="Enter Customer's name"
+                                            required
+                                        ></b-form-input>
+                                    </b-form-group>
+
+                                    <b-form-group label="Phone:">
+                                        <b-form-input
+                                            type="text"
+                                            v-model="customer.phone_customer"
+                                            placeholder="Customer's phone number"
+                                            required
+                                        ></b-form-input>
+                                    </b-form-group>
+
+                                    <b-form-group label="Address:">
+                                        <b-form-input
+                                            type="text"
+                                            v-model="customer.address_customer"
+                                            placeholder="Customer's address"
+                                            required
+                                        ></b-form-input>
+                                    </b-form-group>
+
+                                    <b-form-group label="Email:">
+                                        <b-form-input
                                             type="email"
-                                            placeholder="Enter email"
+                                            v-model="customer.email_customer"
+                                            placeholder="Type Customer's email"
                                             required
                                         ></b-form-input>
                                     </b-form-group>
 
-                                    <b-form-group
-                                        id="input-group-2"
-                                        label="Your Name:"
-                                        label-for="input-2"
-                                    >
+                                    <b-form-group label="City:">
                                         <b-form-input
-                                            id="input-2"
-                                            placeholder="Enter name"
+                                            type="text"
+                                            v-model="customer.city_customer"
+                                            placeholder="Type Customer's City"
                                             required
                                         ></b-form-input>
                                     </b-form-group>
-
 
                                     <div class="row justify-content-center">
-                                        <b-button type="submit" class="mr-1" @click="$bvModal.hide('bv-modal-example')"
-                                        >Close</b-button
-                                    >
-                                    <b-button type="reset" variant="primary"
-                                        >Save</b-button
-                                    >
+                                        <b-button
+                                            class="mr-1"
+                                            @click="
+                                                $bvModal.hide('customer-add')
+                                            "
+                                            >Cancel</b-button
+                                        >
+                                        <b-button
+                                            type="submit"
+                                            variant="primary"
+                                            >Save</b-button
+                                        >
                                     </div>
                                 </b-form>
                             </div>
@@ -140,14 +182,14 @@ export default {
                 id_customer: "",
                 name_customer: "",
                 phone_customer: "",
-                // address_customer:'',
+                address_customer: "",
                 email_customer: "",
                 city_customer: ""
             },
 
             id_customer: "",
             pagination: {},
-            edit: false
+            edit: true
         };
     },
     created() {
@@ -198,6 +240,42 @@ export default {
                         .catch(Error => "error");
                 }
             });
+        },
+        editCustomer: function() {
+            if (this.edit === false) {
+                //update
+            } else {
+                //add
+                let formData = new FormData();
+
+                formData.append("name_customer", this.customer.name_customer);
+                formData.append("phone_customer", this.customer.phone_customer);
+                formData.append("email_customer", this.customer.email_customer);
+                formData.append("city_customer", this.customer.city_customer);
+                formData.append(
+                    "address_customer",
+                    this.customer.address_customer
+                );
+
+                axios
+                    .post("api/customers", formData)
+                    .then(Response => {
+                        this.$bvModal.hide("customer-add");
+                        Swal.fire(
+                            "Success!",
+                            "Data has been added successfully!",
+                            "success"
+                        );
+
+                        this.customer.name_customer = "";
+                        this.customer.phone_customer = "";
+                        this.customer.email_customer = "";
+                        this.customer.city_customer = "";
+                        this.address_customer = "";
+                        this.fetchCustomers();
+                    })
+                    .catch(Error => console.log(Error));
+            }
         }
     }
 };

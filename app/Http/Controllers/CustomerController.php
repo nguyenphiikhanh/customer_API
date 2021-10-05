@@ -29,6 +29,14 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         //
+        Customer::create([
+            "name_customer" => $request->name_customer,
+            "phone_customer" => $request->phone_customer,
+            "email_customer" => $request->email_customer,
+            "city_customer" => $request->city_customer,
+            "address_customer" => $request->address_customer,
+        ]);
+
     }
 
     /**
