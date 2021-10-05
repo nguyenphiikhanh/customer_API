@@ -61,6 +61,13 @@ class CustomerController extends Controller
     public function update(Request $request, Customer $customer)
     {
         //
+        $customer->update([
+            "name_customer" => $request->name_customer,
+            "phone_customer" => $request->phone_customer,
+            "email_customer" => $request->email_customer,
+            "city_customer" => $request->city_customer,
+            "address_customer" => $request->address_customer,
+        ]);
     }
 
     /**
